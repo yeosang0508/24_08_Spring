@@ -17,10 +17,7 @@ public class ArticleService {
 
 	public ArticleService(ArticleRepository articleRepository) {
 		this.articleRepository = articleRepository;
-		
 	}
-
-	
 
 	public int writeArticle(String title, String body) {
 		articleRepository.writeArticle(title, body);
