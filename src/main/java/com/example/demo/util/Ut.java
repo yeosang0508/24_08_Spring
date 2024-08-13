@@ -4,11 +4,11 @@ import java.lang.reflect.Array;
 import java.util.Map;
 
 public class Ut {
-	
+
 	public static boolean isEmptyOrNull(String str) {
 		return str == null || str.trim().length() == 0;
 	}
-	
+
 	public static boolean isEmpty(Object obj) {
 		if(obj == null) {
 			return true;
@@ -29,6 +29,8 @@ public class Ut {
 		return false;
 	}
 
-	
-}
+	public static String f(String format, Object... args) {
 
+		return String.format(format, args);
+	}
+}
