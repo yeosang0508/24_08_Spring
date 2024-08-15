@@ -20,8 +20,8 @@
 				<c:forEach var="article" items="${articles}">
 					<tr>
 						<td style="text-align: center;">${article.id}</td>
-						<td style="text-align: center;">${article.regDate.substring(0,10)}</td>
-						<td style="text-align: center;"><a href="detail?id=${article.id}">${article.title}</a></td>
+						<td style="text-align: center;">${article.regDate.substring(0,10)}</td>						
+						<td style="text-align: center;"><a class="hover:underline" href="detail?id=${article.id}">${article.title}</a></td>
 						<td style="text-align: center;">${article.memberId}</td>
 					</tr>
 				</c:forEach>
