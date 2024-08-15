@@ -1,4 +1,3 @@
-
 DROP DATABASE IF EXISTS `24_08_Spring`;
 CREATE DATABASE `24_08_Spring`;
 USE `24_08_Spring`;
