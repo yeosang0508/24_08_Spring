@@ -20,8 +20,8 @@ public class ArticleService {
 		this.articleRepository = articleRepository;
 	}
 
-	public ResultData writeArticle(String title, String body) {
-		articleRepository.writeArticle(title, body);
+	public ResultData writeArticle(int memberId, String title, String body) {
+		articleRepository.writeArticle(memberId, title, body);
 		int id = articleRepository.getLastInsertId();
 		
 		return ResultData.from("S-1", Ut.f("%d번 글이 등록되었습니다", id), id);
