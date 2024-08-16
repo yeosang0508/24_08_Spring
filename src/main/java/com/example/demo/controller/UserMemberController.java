@@ -33,7 +33,7 @@ public class UserMemberController {
 
 	@RequestMapping("/user/member/login")
 	public String showLogin() {
-		return "/usr/member/login";
+		return "/user/member/login";
 	}
 
 	@RequestMapping("/user/member/doLogin")

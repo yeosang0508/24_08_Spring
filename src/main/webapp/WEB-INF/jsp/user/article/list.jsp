@@ -28,6 +28,9 @@
 			</tbody>
 		</table>
 	</div>
+	<div class="btns">
+			<a href="write">새 게시글 작성하기</a>
+		</div>
 </section>
 
 <%@ include file="../common/foot.jspf"%>

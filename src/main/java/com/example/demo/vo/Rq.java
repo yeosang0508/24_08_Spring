@@ -64,4 +64,8 @@ public class Rq {
 	public void login(Member member) {
 		session.setAttribute("loginedMemberId", member.getId());
 	}
+
+	public void modify(Article article) {
+		session.setAttribute("findId", article.getId());
+	}
 }

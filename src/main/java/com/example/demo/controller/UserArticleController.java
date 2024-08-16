@@ -36,13 +36,14 @@ public class UserArticleController {
 		return "user/article/detail";
 	}
 
+
+	
 	@RequestMapping("/user/article/doModify")
 	@ResponseBody
 	public ResultData<Article> doModify(HttpServletRequest req, int id, String title, String body) {
 
 		Rq rq = (Rq) req.getAttribute("rq");
 
-	
 		Article article = articleService.getArticleById(id);
 
 		if (article == null) {
@@ -63,7 +64,7 @@ public class UserArticleController {
 
 		return ResultData.from(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg(), "수정 된 게시글", article);
 	}
-	
+
 	
 	@RequestMapping("/user/article/doDelete")
 	@ResponseBody
@@ -90,22 +91,27 @@ public class UserArticleController {
 
 		return Ut.jsReplace(userCanDeleteRd.getResultCode(), userCanDeleteRd.getMsg(), "../article/list");
 	}
-
+	
+	
+	@RequestMapping("/user/article/write")
+	public String showWrite() {
+		return"user/article/write";
+	}
 
 	@RequestMapping("/user/article/doWrite")
 	@ResponseBody
-	public ResultData<Article> doWrite(HttpServletRequest req, String title, String body) {
+	public String doWrite(HttpServletRequest req, String title, String body) {
 
 		Rq rq = (Rq) req.getAttribute("rq");
 
 		
 		
 		if(Ut.isEmptyOrNull(title)) {
-			return ResultData.from("F-1", "제목을 입력해주세요");
+			return Ut.jsHistoryBack("F-1", "제목을 입력해주세요");
 		}
 		
 		if(Ut.isEmptyOrNull(body)) {
-			return ResultData.from("F-2", "내용을 입력해주세요");
+			return Ut.jsHistoryBack("F-2", "내용을 입력해주세요");
 		}
 		
 		ResultData writeArticleRd = articleService.writeArticle(rq.getLoginedMemberId(), title, body);
@@ -113,7 +119,9 @@ public class UserArticleController {
 		int id = (int) writeArticleRd.getData1();
 		
 		Article article = articleService.getArticleById(id);
-		return ResultData.newData(writeArticleRd, "생성된 게시글", article);
+//		return ResultData.newData(writeArticleRd, "생성된 게시글", article);
+		
+		return Ut.jsReplace("S-1", writeArticleRd.getMsg(), "list");
 	}
 
 	@RequestMapping("/user/article/list")
