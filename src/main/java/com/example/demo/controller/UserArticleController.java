@@ -36,33 +36,50 @@ public class UserArticleController {
 		return "user/article/detail";
 	}
 
-
+	@RequestMapping("/user/article/modify")
+	public String showModify() {
+		return "/user/article/modify";
+	}
 	
 	@RequestMapping("/user/article/doModify")
 	@ResponseBody
-	public ResultData<Article> doModify(HttpServletRequest req, int id, String title, String body) {
-
+	public String doModify(HttpServletRequest req, Model model, int id, String title, String body) {
 		Rq rq = (Rq) req.getAttribute("rq");
 
 		Article article = articleService.getArticleById(id);
 
 		if (article == null) {
-			return ResultData.from("F-1", Ut.f("%d번 게시글은 없습니다", id));
+			return Ut.jsHistoryBack("F-1", Ut.f("%d번 게시글은 없습니다", id));
 		}
-
+		
+		
+		if(Ut.isEmptyOrNull(title)) {
+			return Ut.jsHistoryBack("F-1", "제목을 입력해주세요");
+		}
+		
+		if(Ut.isEmptyOrNull(body)) {
+			return Ut.jsHistoryBack("F-2", "내용을 입력해주세요");
+		}
+		
+	
 		ResultData userCanModifyRd = articleService.userCanModify(rq.getLoginedMemberId(), article);
 
 		if (userCanModifyRd.isFail()) {
-			return userCanModifyRd;
+			return Ut.jsHistoryBack(userCanModifyRd.getResultCode(),userCanModifyRd.getMsg());
 		}
 
 		if (userCanModifyRd.isSuccess()) {
 			articleService.modifyArticle(id, title, body);
 		}
 
+	
 		article = articleService.getArticleById(id);
 
-		return ResultData.from(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg(), "수정 된 게시글", article);
+		model.addAttribute(id);
+		
+		
+		return Ut.jsReplace(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg(), "../article/list");
+
 	}
 
 	
@@ -121,7 +138,7 @@ public class UserArticleController {
 		Article article = articleService.getArticleById(id);
 //		return ResultData.newData(writeArticleRd, "생성된 게시글", article);
 		
-		return Ut.jsReplace("S-1", writeArticleRd.getMsg(), "list");
+		return Ut.jsReplace("S-1", writeArticleRd.getMsg(), "../article/list");
 	}
 
 	@RequestMapping("/user/article/list")

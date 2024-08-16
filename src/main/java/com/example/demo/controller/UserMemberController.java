@@ -63,40 +63,47 @@ public class UserMemberController {
 
 		return Ut.jsReplace("S-1", Ut.f("%s님 환영합니다", member.getNickname()), "/");
 	}
+	
+	@RequestMapping("/user/member/join")
+	public String showJoin() {
+		return "/user/member/join";
+	}
 
 	@RequestMapping("/user/member/doJoin")
 	@ResponseBody
-	public ResultData<Member> doJoin(HttpServletRequest req, String loginId, String loginPw, String name,
+	public String doJoin(HttpServletRequest req, String loginId, String loginPw, String name,
 			String nickname, String cellphoneNum, String email) {
 
 		if (Ut.isEmptyOrNull(loginId)) {
-			return ResultData.from("F-1", "loginId 입력 x");
+			return Ut.jsHistoryBack("F-1", "loginId 입력 x");
 		}
 		if (Ut.isEmptyOrNull(loginPw)) {
-			return ResultData.from("F-2", "loginPw 입력 x");
+			return Ut.jsHistoryBack("F-2", "loginPw 입력 x");
 		}
 		if (Ut.isEmptyOrNull(name)) {
-			return ResultData.from("F-3", "name 입력 x");
+			return Ut.jsHistoryBack("F-3", "name 입력 x");
 		}
 		if (Ut.isEmptyOrNull(nickname)) {
-			return ResultData.from("F-4", "nickname 입력 x");
+			return Ut.jsHistoryBack("F-4", "nickname 입력 x");
 		}
 		if (Ut.isEmptyOrNull(cellphoneNum)) {
-			return ResultData.from("F-5", "cellphoneNum 입력 x");
+			return Ut.jsHistoryBack("F-5", "cellphoneNum 입력 x");
 		}
 		if (Ut.isEmptyOrNull(email)) {
-			return ResultData.from("F-6", "email 입력 x");
+			return Ut.jsHistoryBack("F-6", "email 입력 x");
 		}
 
 		ResultData doJoinRd = memberService.doJoin(loginId, loginPw, name, nickname, cellphoneNum, email);
 
 		if (doJoinRd.isFail()) {
-			return doJoinRd;
+
+			return Ut.jsHistoryBack(doJoinRd.getResultCode(), doJoinRd.getMsg());
 		}
 
 		Member member = memberService.getMemberById((int) doJoinRd.getData1());
 
-		return ResultData.newData(doJoinRd, "새로 생성된 member", member);
+		return Ut.jsReplace(doJoinRd.getResultCode(), doJoinRd.getMsg(),"/");
+		
 	}
 
 }
