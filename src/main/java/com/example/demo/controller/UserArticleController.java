@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.service.ArticleService;
@@ -37,13 +38,17 @@ public class UserArticleController {
 	}
 
 	@RequestMapping("/user/article/modify")
-	public String showModify() {
+	public String showModify(int id, Model model) {
+		Article article = articleService.getArticleById(id);
+		
+		model.addAttribute("article", article);
+		
 		return "/user/article/modify";
 	}
 	
 	@RequestMapping("/user/article/doModify")
 	@ResponseBody
-	public String doModify(HttpServletRequest req, Model model, int id, String title, String body) {
+	public String doModify( HttpServletRequest req, Integer id, String title, String body) {
 		Rq rq = (Rq) req.getAttribute("rq");
 
 		Article article = articleService.getArticleById(id);
@@ -75,8 +80,6 @@ public class UserArticleController {
 	
 		article = articleService.getArticleById(id);
 
-		model.addAttribute(id);
-		
 		
 		return Ut.jsReplace(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg(), "../article/list");
 
