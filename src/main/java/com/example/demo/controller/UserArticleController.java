@@ -23,6 +23,9 @@ import jakarta.servlet.http.HttpSession;
 public class UserArticleController {
 
 	@Autowired
+	private Rq rq;
+	
+	@Autowired
 	private ArticleService articleService;
 
 	@RequestMapping("/user/article/detail")

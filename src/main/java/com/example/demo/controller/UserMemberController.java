@@ -18,13 +18,14 @@ import jakarta.servlet.http.HttpSession;
 public class UserMemberController {
 
 	@Autowired
+	private Rq rq;
+	
+	@Autowired
 	private MemberService memberService;
 
 	@RequestMapping("/user/member/doLogout")
 	@ResponseBody
 	public String doLogout(HttpServletRequest req) {
-
-		Rq rq = (Rq) req.getAttribute("rq");
 
 		rq.logout();
 
@@ -32,7 +33,7 @@ public class UserMemberController {
 	}
 
 	@RequestMapping("/user/member/login")
-	public String showLogin() {
+	public String showLogin(HttpServletRequest req) {
 		return "/user/member/login";
 	}
 
@@ -93,16 +94,16 @@ public class UserMemberController {
 			return Ut.jsHistoryBack("F-6", "email 입력 x");
 		}
 
-		ResultData doJoinRd = memberService.doJoin(loginId, loginPw, name, nickname, cellphoneNum, email);
+		ResultData joinRd = memberService.join(loginId, loginPw, name, nickname, cellphoneNum, email);
 
-		if (doJoinRd.isFail()) {
+		if (joinRd.isFail()) {
 
-			return Ut.jsHistoryBack(doJoinRd.getResultCode(), doJoinRd.getMsg());
+			return Ut.jsHistoryBack(joinRd.getResultCode(), joinRd.getMsg());
 		}
 
-		Member member = memberService.getMemberById((int) doJoinRd.getData1());
+		Member member = memberService.getMemberById((int) joinRd.getData1());
 
-		return Ut.jsReplace(doJoinRd.getResultCode(), doJoinRd.getMsg(),"/");
+		return Ut.jsReplace(joinRd.getResultCode(), joinRd.getMsg(),"../member/login");
 		
 	}
 
