@@ -15,7 +15,7 @@
 
 		WHERE id = #{id}
 	</update> -->
-
+<!-- 
 	<insert id="writeArticle">
 		INSERT INTO article
 		SET regDate = NOW(),
@@ -24,9 +24,9 @@
 		memberId = #{memberId},
 		title = #{title},
 		`body` = #{body}
-	</insert>
+	</insert> -->
 
-	<select id="getArticles" resultType="Article">
+<!-- 	<select id="getArticles" resultType="Article">
 		SELECT A.* , M.nickname AS
 		extra__writer
 		FROM article AS A
@@ -36,7 +36,7 @@
 		ORDER BY
 		A.id DESC
 	</select>
-
+ -->
 	<!-- <select id="getArticleById" resultType="Article">
 		SELECT A.* , M.nickname AS extra__writer
 		FROM article AS A
