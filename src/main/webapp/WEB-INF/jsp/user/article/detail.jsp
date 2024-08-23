@@ -59,6 +59,20 @@
 					<td style="text-align: center;">${article.extra__writer}</td>
 				</tr>
 				<tr>
+					<th style="text-align: center;">Sum</th>
+					<td style="text-align: center;">${article.extra__sumReactionPoint}</td>
+				</tr>
+				<tr>
+					<th style="text-align: center;">LIKE</th>
+					<td style="text-align: center;">${article.extra__goodReactionPoint}</td>
+				</tr>
+				
+				<tr>
+					<th style="text-align: center;">Bad</th>
+					<td style="text-align: center;">${article.extra__badReactionPoint}</td>
+				</tr>
+				
+				<tr>
 					<th style="text-align: center;">Views</th>
 
 					<td style="text-align: center;">
