@@ -1,4 +1,3 @@
-
 package com.example.demo.controller;
 
 import java.io.IOException;
@@ -33,31 +32,31 @@ public class UserArticleController {
 
 	@Autowired
 	private BoardService boardService;
-	
+
 	@Autowired
 	private ReactionPointService reactionPointService;
 
 	@RequestMapping("/user/article/detail")
 	public String showDetail(HttpServletRequest req, Model model, int id) {
-
 		Rq rq = (Rq) req.getAttribute("rq");
 
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
-		
-		// -1 싫어요, 0 표현 x, 1 좋아요
-		
-		int userCanReaction = reactionPointService.userCanReaction(rq.getLoginedMemberId(), "article", id);
-		
-		System.err.println(userCanReaction);
+
+		ResultData usersReactionRd = reactionPointService.usersReaction(rq.getLoginedMemberId(), "article", id);
+
+		if (usersReactionRd.isSuccess()) {
+			model.addAttribute("userCanMakeReaction", usersReactionRd.isSuccess());
+		}
 
 		model.addAttribute("article", article);
-		model.addAttribute("userCanReaction", userCanReaction);
-		
+		model.addAttribute("isAlreadyAddGoodRp",
+				reactionPointService.isAlreadyAddGoodRp(rq.getLoginedMemberId(), id, "article"));
+		model.addAttribute("isAlreadyAddBadRp",
+				reactionPointService.isAlreadyAddBadRp(rq.getLoginedMemberId(), id, "article"));
 
 		return "user/article/detail";
 	}
-	
-	
+
 	@RequestMapping("/user/article/doIncreaseHitCountRd")
 	@ResponseBody
 	public ResultData doIncreaseHitCount(int id) {
@@ -73,12 +72,13 @@ public class UserArticleController {
 		rd.setData2("조회수가 증가된 게시글의 id", id);
 
 		return rd;
-	
 	}
 
 	@RequestMapping("/user/article/modify")
-	public String showModify(HttpServletRequest req, int id, Model model) {
+	public String showModify(HttpServletRequest req, Model model, int id) {
+
 		Rq rq = (Rq) req.getAttribute("rq");
+
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
 
 		if (article == null) {
@@ -90,9 +90,11 @@ public class UserArticleController {
 		return "/user/article/modify";
 	}
 
+	// 로그인 체크 -> 유무 체크 -> 권한 체크 -> 수정
 	@RequestMapping("/user/article/doModify")
 	@ResponseBody
-	public String doModify(HttpServletRequest req, Integer id, String title, String body) {
+	public String doModify(HttpServletRequest req, int id, String title, String body) {
+
 		Rq rq = (Rq) req.getAttribute("rq");
 
 		Article article = articleService.getArticleById(id);
@@ -142,7 +144,8 @@ public class UserArticleController {
 	}
 
 	@RequestMapping("/user/article/write")
-	public String showWrite() {
+	public String showWrite(HttpServletRequest req) {
+
 		return "user/article/write";
 	}
 
@@ -155,11 +158,9 @@ public class UserArticleController {
 		if (Ut.isEmptyOrNull(title)) {
 			return Ut.jsHistoryBack("F-1", "제목을 입력해주세요");
 		}
-
 		if (Ut.isEmptyOrNull(body)) {
 			return Ut.jsHistoryBack("F-2", "내용을 입력해주세요");
 		}
-
 		if (Ut.isEmptyOrNull(boardId)) {
 			return Ut.jsHistoryBack("F-3", "게시판을 선택해주세요");
 		}
@@ -171,18 +172,21 @@ public class UserArticleController {
 		int id = (int) writeArticleRd.getData1();
 
 		Article article = articleService.getArticleById(id);
-//		return ResultData.newData(writeArticleRd, "생성된 게시글", article);
 
-		return Ut.jsReplace("S-1", writeArticleRd.getMsg(), "../article/list");
+		return Ut.jsReplace(writeArticleRd.getResultCode(), writeArticleRd.getMsg(), "../article/detail?id=" + id);
+
 	}
 
 	@RequestMapping("/user/article/list")
 	public String showList(HttpServletRequest req, Model model, @RequestParam(defaultValue = "1") int boardId,
-			@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "title, body") String searchKeywordTypeCode, @RequestParam(defaultValue = "") String searchKeyword) throws IOException {
+			@RequestParam(defaultValue = "1") int page,
+			@RequestParam(defaultValue = "title,body") String searchKeywordTypeCode,
+			@RequestParam(defaultValue = "") String searchKeyword) throws IOException {
 
 		Rq rq = (Rq) req.getAttribute("rq");
 
 		Board board = boardService.getBoardById(boardId);
+
 		int articlesCount = articleService.getArticlesCount(boardId, searchKeywordTypeCode, searchKeyword);
 
 		// 한페이지에 글 10개
@@ -191,10 +195,10 @@ public class UserArticleController {
 		int itemsInAPage = 10;
 
 		int pagesCount = (int) Math.ceil(articlesCount / (double) itemsInAPage);
+
 		List<Article> articles = articleService.getForPrintArticles(boardId, itemsInAPage, page, searchKeywordTypeCode,
 				searchKeyword);
-		
-		
+
 		if (board == null) {
 			return rq.historyBackOnView("없는 게시판임");
 		}
@@ -207,9 +211,7 @@ public class UserArticleController {
 		model.addAttribute("searchKeywordTypeCode", searchKeywordTypeCode);
 		model.addAttribute("searchKeyword", searchKeyword);
 		model.addAttribute("boardId", boardId);
-		
-		
-		return "/user/article/list";
-	}
 
+		return "user/article/list";
+	}
 }
