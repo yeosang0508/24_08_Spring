@@ -13,6 +13,7 @@
 			<!-- 			<form action="../article/list"> -->
 			<form action="">
 				<input type="hidden" name="boardId" value="${param.boardId }" />
+				
 				<div class="flex">
 					<select class="select select-sm select-bordered
 						max-w-xs" name="searchKeywordTypeCode"
@@ -49,6 +50,7 @@
 			</thead>
 			<tbody>
 				<c:forEach var="article" items="${articles}">
+				
 					<tr class="hover">
 						<td style="text-align: center;">${article.id}</td>
 						<td style="text-align: center;">${article.regDate.substring(0,10)}</td>
