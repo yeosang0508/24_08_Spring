@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import com.example.demo.vo.Reply;
 
@@ -20,7 +21,7 @@ public interface ReplyRepository {
 			AND relId = #{relId}
 			ORDER BY R.id ASC;
 				""")
-	public List<Reply> getForPrintReplies(String relTypeCode, int relId);
+	public List<Reply> getForPrintReplies(int loginedMemberId, String relTypeCode, int relId);
 
 	@Insert("""
 			INSERT INTO reply
@@ -36,6 +37,20 @@ public interface ReplyRepository {
 	@Select("SELECT LAST_INSERT_ID();")
 	public int getLastInsertId();
 
-	
+
+	@Select("""
+				SELECT R.*
+				FROM reply AS R
+				WHERE R.id = #{id}
+			""")
+	Reply getReply(int id);
+
+	@Update("""
+			UPDATE reply
+			SET `body` = #{body},
+			updateDate = NOW()
+			WHERE id = #{id}
+				""")
+	public void modifyReply(int id, String body);
 	
 }
