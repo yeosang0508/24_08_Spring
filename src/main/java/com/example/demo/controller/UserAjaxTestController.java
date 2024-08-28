@@ -15,7 +15,7 @@ public class UserAjaxTestController {
 		return "/user/home/AjaxTest";
 	}
 
-	@RequestMapping("/usr/home/doPlus")
+	@RequestMapping("/user/home/doPlus")
 	@ResponseBody
 	public String doPlus(int num1, int num2) {
 		String msg = "더하기 성공!";
