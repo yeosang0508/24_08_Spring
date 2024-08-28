@@ -11,4 +11,8 @@ public class UserAPITestController {
 		return "/user/home/APITest";
 	}
 
+	@RequestMapping("/user/home/APITest2")
+	public String showAPITest2() {
+		return "/user/home/APITest2";
+	}
 }
