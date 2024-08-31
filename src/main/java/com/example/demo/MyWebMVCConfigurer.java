@@ -47,25 +47,40 @@ public class MyWebMVCConfigurer implements WebMvcConfigurer {
 		ir.excludePathPatterns("/resource/**");
 		ir.excludePathPatterns("/error");
 
+//		로그인 필요
 		ir = registry.addInterceptor(needLoginInterceptor);
-		ir.addPathPatterns("/user/article/write");
-		ir.addPathPatterns("/user/article/doWrite");
-		ir.addPathPatterns("/user/article/modify");
-		ir.addPathPatterns("/user/article/doModify");
-		ir.addPathPatterns("/user/article/doDelete");
-		ir.addPathPatterns("/user/member/doLogout");
-		
-		ir. addPathPatterns("/user/reply/doWrite");
+//		글 관련
+		ir.addPathPatterns("/usr/article/write");
+		ir.addPathPatterns("/usr/article/doWrite");
+		ir.addPathPatterns("/usr/article/modify");
+		ir.addPathPatterns("/usr/article/doModify");
+		ir.addPathPatterns("/usr/article/doDelete");
 
-		ir.addPathPatterns("/user/reactionPoint/doGoodReaction");
-		ir.addPathPatterns("/user/reactionPoint/doBadReaction");
+//		회원관련
+		ir.addPathPatterns("/usr/member/myPage");
+		ir.addPathPatterns("/usr/member/checkPw");
+		ir.addPathPatterns("/usr/member/doCheckPw");
+		ir.addPathPatterns("/usr/member/doLogout");
+		ir.addPathPatterns("/usr/member/modify");
+		ir.addPathPatterns("/usr/member/doModify");
 
+//		댓글 관련
+		ir.addPathPatterns("/usr/reply/doWrite");
+
+//		좋아요 싫어요
+		ir.addPathPatterns("/usr/reactionPoint/doGoodReaction");
+		ir.addPathPatterns("/usr/reactionPoint/doBadReaction");
+
+//		로그아웃 필요
 		ir = registry.addInterceptor(needLogoutInterceptor);
-		ir.addPathPatterns("/user/member/login");
-		ir.addPathPatterns("/user/member/doLogin");
-		ir.addPathPatterns("/user/member/join");
-		ir.addPathPatterns("/user/member/doJoin");
-
+		ir.addPathPatterns("/usr/member/login");
+		ir.addPathPatterns("/usr/member/doLogin");
+		ir.addPathPatterns("/usr/member/join");
+		ir.addPathPatterns("/usr/member/doJoin");
+		ir.addPathPatterns("/usr/member/findLoginId");
+		ir.addPathPatterns("/usr/member/doFindLoginId");
+		ir.addPathPatterns("/usr/member/findLoginPw");
+		ir.addPathPatterns("/usr/member/doFindLoginPw");
 	}
 
 }

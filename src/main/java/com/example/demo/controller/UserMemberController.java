@@ -106,5 +106,33 @@ public class UserMemberController {
 		return Ut.jsReplace(joinRd.getResultCode(), joinRd.getMsg(),"../member/login");
 		
 	}
+	
+	@RequestMapping("/user/member/myPage")
+	public String showmyPage() {
+		return "user/member/myPage";
+	}
 
+	@RequestMapping("/user/member/checkPw")
+	public String showCheckPw() {
+		return "user/member/checkPw";
+	}
+
+	@RequestMapping("/user/member/doCheckPw")
+	@ResponseBody
+	public String doCheckPw(String loginPw) {
+		if (Ut.isEmptyOrNull(loginPw)) {
+			return rq.historyBackOnView("비번 써");
+		}
+
+		if (rq.getLoginedMember().getLoginPw().equals(loginPw) == false) {
+			return rq.historyBackOnView("비번 틀림");
+		}
+
+		return Ut.jsReplace("S-1", Ut.f("비밀번호 확인 성공"), "modify");
+	}
+
+	@RequestMapping("/user/member/modify")
+	public String showmyModify() {
+		return "user/member/modify";
+	}
 }
