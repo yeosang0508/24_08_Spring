@@ -2,9 +2,8 @@ package com.example.demo.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.example.demo.vo.Article;
+import com.example.demo.util.crawlTest;
 
 @Controller
 public class UserHomeController {
@@ -16,6 +15,14 @@ public class UserHomeController {
 	
 	@RequestMapping("/")
 	public String showRoot() {
+		return "redirect:/user/home/main";
+	}
+	
+	@RequestMapping("/user/crawl")
+	public String doCrawl() {
+
+		crawlTest.crawl();
+
 		return "redirect:/user/home/main";
 	}
 }
