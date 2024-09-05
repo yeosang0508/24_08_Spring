@@ -1,4 +1,3 @@
-
 package com.example.demo.vo;
 
 import java.io.IOException;
@@ -25,7 +24,7 @@ public class Rq {
 	private int loginedMemberId;
 	@Getter
 	private Member loginedMember;
-	
+
 	private HttpServletRequest req;
 	private HttpServletResponse resp;
 
@@ -43,7 +42,7 @@ public class Rq {
 			loginedMemberId = (int) httpSession.getAttribute("loginedMemberId");
 			loginedMember = memberService.getMemberById(loginedMemberId);
 		}
-		
+
 		this.req.setAttribute("rq", this);
 	}
 
@@ -79,18 +78,38 @@ public class Rq {
 		session.setAttribute("loginedMember", member);
 	}
 
-	public void modify(Article article) {
-		session.setAttribute("findId", article.getId());
-	}
-
 	public void initBeforeActionInterceptor() {
 		System.err.println("initBeforeActionInterceptor 실행");
-		
 	}
-	
+
 	public String historyBackOnView(String msg) {
 		req.setAttribute("msg", msg);
 		req.setAttribute("historyBack", true);
 		return "usr/common/js";
+	}
+
+	public String getCurrentUri() {
+		String currentUri = req.getRequestURI();
+		String queryString = req.getQueryString();
+
+		System.err.println(currentUri);
+		System.err.println(queryString);
+
+		if (currentUri != null && queryString != null) {
+			currentUri += "?" + queryString;
+		}
+
+		System.out.println(currentUri);
+
+		return currentUri;
+	}
+
+	public void printReplace(String resultCode, String msg, String replaceUri) {
+		resp.setContentType("text/html; charset=UTF-8");
+		print(Ut.jsReplace(resultCode, msg, replaceUri));
+	}
+
+	public String getEncodedCurrentUri() {
+		return Ut.getEncodedCurrentUri(getCurrentUri());
 	}
 }
